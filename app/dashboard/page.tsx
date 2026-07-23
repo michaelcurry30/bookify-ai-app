@@ -1,16 +1,17 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+
 
 export default function Dashboard() {
   const [appointments, setAppointments] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    supabase.from('appointments').select().order('start_time', { ascending: true })
-      .then(({ data }) => setAppointments(data || []))
-  }, [])
+  fetch('/api/appointments')
+    .then(res => res.json())
+    .then(data => setAppointments(data.appointments || []))
+}, [])
 
   const recovered = appointments
     .filter(a => a.status === 'filled')

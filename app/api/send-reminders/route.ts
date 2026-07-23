@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabaseAdmin as supabase } from '@/lib/supabase-admin'
 import { sendSMS } from '@/lib/sms'
 import { NextResponse } from 'next/server'
 
