@@ -377,7 +377,7 @@ export default function Home() {
     <div class="plans">
       <div class="plan">
         <h3>Starter</h3>
-        <div class="price">$59<span>/mo</span></div>
+        <div class="price">$39<span>/mo</span></div>
         <div class="desc">For a single location getting started</div>
         <ul>
           <li>1 location</li>
@@ -390,7 +390,7 @@ export default function Home() {
       <div class="plan pop">
         <div class="pop-badge">MOST POPULAR</div>
         <h3>Growth</h3>
-        <div class="price">$119<span>/mo</span></div>
+        <div class="price">$89<span>/mo</span></div>
         <div class="desc">For locations with real no-show volume</div>
         <ul>
           <li>1 location</li>
@@ -404,7 +404,7 @@ export default function Home() {
       </div>
       <div class="plan">
         <h3>Premium</h3>
-        <div class="price">$249<span>/mo</span></div>
+        <div class="price">$129<span>/mo</span></div>
         <div class="desc">For chains and franchises</div>
         <ul>
           <li>Up to 5 locations</li>
