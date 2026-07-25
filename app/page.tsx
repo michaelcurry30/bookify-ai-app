@@ -262,9 +262,9 @@ export default function Home() {
 <section class="hero">
   <div class="wrap hero-inner">
     <div>
-      <div class="badge"><span class="dot"></span>Built for 25+ types of appointment-based businesses</div>
+      <div class="badge"><span class="dot"></span>Built for beauty, medical &amp; health businesses</div>
       <h1>Stop losing revenue to <span class="accent">no-shows</span> and last-minute cancellations.</h1>
-      <p class="hero-sub">Bookify AI sends smart reminders before appointments and automatically fills any slot that opens up — whether you run a salon, a clinic, a studio, or any business built around booked time.</p>
+      <p class="hero-sub">Bookify AI sends smart reminders before appointments and automatically fills any slot that opens up — built for salons, spas, and medical clinics where every empty slot is money walking out the door.</p>
       <div class="hero-ctas">
         <a class="btn-primary" href="#pricing">Start 14-day free trial</a>
       </div>
@@ -315,29 +315,6 @@ export default function Home() {
           <span class="tag">General Medical</span>
           <span class="tag">Optometry</span>
           <span class="tag">Veterinary</span>
-        </div>
-      </div>
-      <div class="industry-category">
-        <h3>Wellness &amp; Personal Care</h3>
-        <div class="industry-tags">
-          <span class="tag">Personal Training</span>
-          <span class="tag">Massage &amp; Wellness Spas</span>
-          <span class="tag">Nutritionists</span>
-          <span class="tag">Speech &amp; OT Therapy</span>
-          <span class="tag">Mental Health</span>
-        </div>
-      </div>
-      <div class="industry-category">
-        <h3>Professional &amp; Other Services</h3>
-        <div class="industry-tags">
-          <span class="tag">Photography</span>
-          <span class="tag">Tutoring &amp; Test Prep</span>
-          <span class="tag">Driving Schools</span>
-          <span class="tag">Auto Repair</span>
-          <span class="tag">Legal Services</span>
-          <span class="tag">Accounting &amp; Tax</span>
-          <span class="tag">Real Estate</span>
-          <span class="tag">Wedding &amp; Events</span>
         </div>
       </div>
     </div>
