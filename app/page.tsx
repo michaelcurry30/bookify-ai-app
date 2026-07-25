@@ -20,6 +20,7 @@ export default function Home() {
     --red-bg:rgba(251,113,133,0.1);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{overflow-x:hidden;max-width:100vw;}
   html{scroll-behavior:smooth;}
   body{
     background:var(--bg);
@@ -142,6 +143,9 @@ export default function Home() {
     padding:7px 12px;
     border-radius:20px;
     transition:border-color .15s, color .15s;
+    max-width:100%;
+    overflow-wrap:break-word;
+    white-space:normal;
   }
   .industry-tags .tag:hover{border-color:var(--indigo);color:var(--ink);}
 
@@ -290,48 +294,48 @@ export default function Home() {
       <div class="industry-category">
         <h3>Beauty &amp; Grooming</h3>
         <div class="industry-tags">
-          <span class="tag">Med Spas &amp; Cosmetic Dermatology</span>
-          <span class="tag">Premium &amp; Braiding Salons</span>
+          <span class="tag">Med Spas</span>
+          <span class="tag">Braiding Salons</span>
           <span class="tag">Full-Service Salons</span>
           <span class="tag">Barbershops</span>
           <span class="tag">Nail Salons</span>
-          <span class="tag">Laser Hair Removal &amp; Aesthetics</span>
-          <span class="tag">Tattoo &amp; Piercing Studios</span>
+          <span class="tag">Laser Hair Removal</span>
+          <span class="tag">Tattoo &amp; Piercing</span>
         </div>
       </div>
       <div class="industry-category">
-        <h3>Health &amp; Medical</h3>
+        <h3>Medical &amp; Health</h3>
         <div class="industry-tags">
-          <span class="tag">Chiropractic Clinics</span>
+          <span class="tag">Chiropractic</span>
           <span class="tag">Physical Therapy</span>
-          <span class="tag">Dermatology (Medical)</span>
-          <span class="tag">Dental Practices</span>
-          <span class="tag">General Medical &amp; Doctor's Offices</span>
-          <span class="tag">Optometry &amp; Eye Care</span>
-          <span class="tag">Veterinary Clinics</span>
-          <span class="tag">Massage Therapy &amp; Wellness Spas</span>
-          <span class="tag">Nutritionists &amp; Dietitians</span>
-          <span class="tag">Speech &amp; Occupational Therapy</span>
-          <span class="tag">Mental Health Counselors</span>
+          <span class="tag">Dermatology</span>
+          <span class="tag">Dental</span>
+          <span class="tag">General Medical</span>
+          <span class="tag">Optometry</span>
+          <span class="tag">Veterinary</span>
         </div>
       </div>
       <div class="industry-category">
-        <h3>Fitness &amp; Wellness</h3>
+        <h3>Wellness &amp; Personal Care</h3>
         <div class="industry-tags">
-          <span class="tag">Fitness Studios &amp; Personal Training</span>
+          <span class="tag">Personal Training</span>
+          <span class="tag">Massage &amp; Wellness Spas</span>
+          <span class="tag">Nutritionists</span>
+          <span class="tag">Speech &amp; OT Therapy</span>
+          <span class="tag">Mental Health</span>
         </div>
       </div>
       <div class="industry-category">
         <h3>Professional &amp; Other Services</h3>
         <div class="industry-tags">
-          <span class="tag">Photography Studios</span>
+          <span class="tag">Photography</span>
           <span class="tag">Tutoring &amp; Test Prep</span>
           <span class="tag">Driving Schools</span>
-          <span class="tag">Auto Repair &amp; Detailing</span>
-          <span class="tag">Legal Consultations</span>
-          <span class="tag">Accounting &amp; Tax Consultations</span>
-          <span class="tag">Real Estate Viewings</span>
-          <span class="tag">Wedding &amp; Event Vendors</span>
+          <span class="tag">Auto Repair</span>
+          <span class="tag">Legal Services</span>
+          <span class="tag">Accounting &amp; Tax</span>
+          <span class="tag">Real Estate</span>
+          <span class="tag">Wedding &amp; Events</span>
         </div>
       </div>
     </div>
@@ -554,3 +558,4 @@ export default function Home() {
     </>
   )
 }
+
