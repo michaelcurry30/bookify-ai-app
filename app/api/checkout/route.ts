@@ -1,8 +1,19 @@
 import { stripe } from '@/lib/stripe'
 import { NextRequest, NextResponse } from 'next/server'
 
+const PRICE_MAP: Record<string, string | undefined> = {
+  starter: process.env.STRIPE_PRICE_STARTER,
+  growth: process.env.STRIPE_PRICE_GROWTH,
+  premium: process.env.STRIPE_PRICE_PREMIUM,
+}
+
 export async function POST(req: NextRequest) {
-  const { priceId } = await req.json()
+  const { plan } = await req.json()
+  const priceId = PRICE_MAP[plan]
+
+  if (!priceId) {
+    return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
+  }
 
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',

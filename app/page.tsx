@@ -451,7 +451,7 @@ export default function Home() {
           <li>SMS + email reminders</li>
           <li>Basic waitlist auto-fill</li>
         </ul>
-        <a href="#">Start free trial</a>
+        <a href="#" class="checkout-btn" data-plan="starter">Start free trial</a>
       </div>
       <div class="plan pop">
         <div class="pop-badge">MOST POPULAR</div>
@@ -466,7 +466,7 @@ export default function Home() {
           <li>Deposit & no-show fee collection</li>
           <li>Email support</li>
         </ul>
-        <a href="#">Start free trial</a>
+        <a href="#" class="checkout-btn" data-plan="growth">Start free trial</a>
       </div>
       <div class="plan">
         <h3>Premium</h3>
@@ -478,7 +478,7 @@ export default function Home() {
           <li>Everything in Growth</li>
           <li>Location-level reporting</li>
         </ul>
-        <a href="#">Start free trial</a>
+        <a href="#" class="checkout-btn" data-plan="premium">Start free trial</a>
       </div>
     </div>
   </div>
@@ -531,6 +531,32 @@ export default function Home() {
       const wasOpen = item.classList.contains('open');
       document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
       if(!wasOpen) item.classList.add('open');
+    });
+  });
+
+  document.querySelectorAll('.checkout-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const plan = btn.dataset.plan;
+      const originalText = btn.textContent;
+      btn.textContent = 'Loading...';
+      try {
+        const res = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan })
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Something went wrong starting checkout. Please try again.');
+          btn.textContent = originalText;
+        }
+      } catch (err) {
+        alert('Something went wrong starting checkout. Please try again.');
+        btn.textContent = originalText;
+      }
     });
   });
 ` }} />
