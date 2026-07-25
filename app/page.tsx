@@ -128,6 +128,23 @@ export default function Home() {
   .logos-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;opacity:0.6;}
   .logo-item{font-weight:700;font-size:16px;color:var(--ink-soft);letter-spacing:-0.01em;}
 
+  .industries{padding:80px 0;border-top:1px solid var(--line);}
+  .industries-head{max-width:640px;}
+  .industries-head h2{font-weight:800;font-size:clamp(24px,3.2vw,34px);letter-spacing:-0.01em;}
+  .industries-grid{margin-top:44px;display:grid;grid-template-columns:repeat(2,1fr);gap:32px 48px;}
+  .industry-category h3{font-size:14px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:16px;}
+  .industry-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .industry-tags .tag{
+    font-size:13px;
+    color:var(--ink-soft);
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:7px 12px;
+    border-radius:20px;
+    transition:border-color .15s, color .15s;
+  }
+  .industry-tags .tag:hover{border-color:var(--indigo);color:var(--ink);}
+
   .stats{padding:60px 0;border-top:1px solid var(--line);}
   .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
   .stat .num{font-size:34px;font-weight:800;color:var(--cyan);letter-spacing:-0.02em;text-shadow:0 0 22px rgba(34,211,238,0.3);}
@@ -208,7 +225,7 @@ export default function Home() {
 
   @media(max-width:860px){
     .hero-inner{grid-template-columns:1fr;}
-    .problem-grid,.steps,.plans,.t-grid,.stats-grid{grid-template-columns:1fr;}
+    .problem-grid,.steps,.plans,.t-grid,.stats-grid,.industries-grid{grid-template-columns:1fr;}
     .step:not(:last-child)::after{display:none;}
     .step{padding-bottom:24px;}
     .logos-row{justify-content:center;}
@@ -239,9 +256,9 @@ export default function Home() {
 <section class="hero">
   <div class="wrap hero-inner">
     <div>
-      <div class="badge"><span class="dot"></span>Built for salons, med spas, chiropractic & PT clinics</div>
+      <div class="badge"><span class="dot"></span>Built for 25+ types of appointment-based businesses</div>
       <h1>Stop losing revenue to <span class="accent">no-shows</span> and last-minute cancellations.</h1>
-      <p class="hero-sub">Bookify AI sends smart reminders before appointments and automatically fills any slot that opens up — built for salons, barbershops, med spas, dermatology, chiropractic, and physical therapy practices where every empty slot is money walking out the door.</p>
+      <p class="hero-sub">Bookify AI sends smart reminders before appointments and automatically fills any slot that opens up — whether you run a salon, a clinic, a studio, or any business built around booked time.</p>
       <div class="hero-ctas">
         <a class="btn-primary" href="#pricing">Start 14-day free trial</a>
       </div>
@@ -261,14 +278,62 @@ export default function Home() {
       <div class="card-total"><span>Revenue recovered today</span><span class="val">$150</span></div>
     </div>
   </div>
+</section>
 
-  <div class="logos wrap">
-    <div class="logos-label">Built for</div>
-    <div class="logos-row">
-      <div class="logo-item">Hair Salons & Barbershops</div>
-      <div class="logo-item">Med Spas & Dermatology</div>
-      <div class="logo-item">Chiropractic</div>
-      <div class="logo-item">Physical Therapy</div>
+<section class="industries">
+  <div class="wrap">
+    <div class="industries-head">
+      <div class="section-eyebrow">Who it's for</div>
+      <h2>Built for any business where a missed appointment costs real money.</h2>
+    </div>
+    <div class="industries-grid">
+      <div class="industry-category">
+        <h3>Beauty &amp; Grooming</h3>
+        <div class="industry-tags">
+          <span class="tag">Med Spas &amp; Cosmetic Dermatology</span>
+          <span class="tag">Premium &amp; Braiding Salons</span>
+          <span class="tag">Full-Service Salons</span>
+          <span class="tag">Barbershops</span>
+          <span class="tag">Nail Salons</span>
+          <span class="tag">Laser Hair Removal &amp; Aesthetics</span>
+          <span class="tag">Tattoo &amp; Piercing Studios</span>
+        </div>
+      </div>
+      <div class="industry-category">
+        <h3>Health &amp; Medical</h3>
+        <div class="industry-tags">
+          <span class="tag">Chiropractic Clinics</span>
+          <span class="tag">Physical Therapy</span>
+          <span class="tag">Dermatology (Medical)</span>
+          <span class="tag">Dental Practices</span>
+          <span class="tag">General Medical &amp; Doctor's Offices</span>
+          <span class="tag">Optometry &amp; Eye Care</span>
+          <span class="tag">Veterinary Clinics</span>
+          <span class="tag">Massage Therapy &amp; Wellness Spas</span>
+          <span class="tag">Nutritionists &amp; Dietitians</span>
+          <span class="tag">Speech &amp; Occupational Therapy</span>
+          <span class="tag">Mental Health Counselors</span>
+        </div>
+      </div>
+      <div class="industry-category">
+        <h3>Fitness &amp; Wellness</h3>
+        <div class="industry-tags">
+          <span class="tag">Fitness Studios &amp; Personal Training</span>
+        </div>
+      </div>
+      <div class="industry-category">
+        <h3>Professional &amp; Other Services</h3>
+        <div class="industry-tags">
+          <span class="tag">Photography Studios</span>
+          <span class="tag">Tutoring &amp; Test Prep</span>
+          <span class="tag">Driving Schools</span>
+          <span class="tag">Auto Repair &amp; Detailing</span>
+          <span class="tag">Legal Consultations</span>
+          <span class="tag">Accounting &amp; Tax Consultations</span>
+          <span class="tag">Real Estate Viewings</span>
+          <span class="tag">Wedding &amp; Event Vendors</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -289,15 +354,15 @@ export default function Home() {
     <div class="problem-grid">
       <div class="pcard">
         <h3>It adds up fast</h3>
-        <p>A salon losing 3 appointments a week at a $65 average ticket is losing over $10,000 a year. A med spa, chiro, or PT clinic with $150+ tickets loses that in half the time.</p>
+        <p>A business losing just 3 appointments a week at a $65 average ticket is losing over $10,000 a year — and for higher-ticket services, that number climbs even faster.</p>
       </div>
       <div class="pcard">
         <h3>Reminders alone aren't enough</h3>
-        <p>Generic calendar reminders reduce no-shows a little. They do nothing to refill a chair or treatment slot once someone cancels last minute.</p>
+        <p>Generic calendar reminders reduce no-shows a little. They do nothing to refill a chair, a table, or a booked slot once someone cancels last minute.</p>
       </div>
       <div class="pcard">
         <h3>Your staff feel it directly</h3>
-        <p>When stylists or providers work on commission or per-session, an empty slot isn't just the owner's loss — it's their paycheck. Nobody at the front desk has time to manually work the waitlist between clients.</p>
+        <p>Whether you're paid on commission, per session, or per client, an empty slot isn't just the owner's loss — it's real income lost. Nobody has time to manually work a waitlist between appointments.</p>
       </div>
     </div>
   </div>
@@ -344,23 +409,41 @@ export default function Home() {
         <p class="t-quote">Setup took less than an hour. It plugged straight into the calendar we were already using, which is what sold me.</p>
         <div class="t-person">
           <div class="t-avatar">DR</div>
-          <div><div class="t-name">D. Reyes</div><div class="t-role">Barbershop manager</div></div>
+          <div><div class="t-name">D. Reyes</div><div class="t-role">Dental practice manager</div></div>
         </div>
       </div>
       <div class="t-card">
         <div class="t-stars">★★★★★</div>
-        <p class="t-quote">Our no-show rate dropped noticeably in the first month. My stylists actually asked when we were getting this after seeing it work.</p>
+        <p class="t-quote">I'm 1-on-1 all day — a no-show is a session I don't get paid for. This is the first tool that's actually helped with that.</p>
         <div class="t-person">
           <div class="t-avatar">JT</div>
-          <div><div class="t-name">J. Torres</div><div class="t-role">Salon owner</div></div>
+          <div><div class="t-name">J. Torres</div><div class="t-role">Personal trainer</div></div>
         </div>
       </div>
+    </div>
+    <div class="t-grid" style="margin-top:24px;">
       <div class="t-card">
         <div class="t-stars">★★★★★</div>
         <p class="t-quote">Our sessions run $150+, so a no-show used to really sting. The waitlist text usually fills the slot within minutes.</p>
         <div class="t-person">
           <div class="t-avatar">AL</div>
-          <div><div class="t-name">A. Lin</div><div class="t-role">Owner, med spa & chiropractic clinic</div></div>
+          <div><div class="t-name">A. Lin</div><div class="t-role">Owner, chiropractic clinic</div></div>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-quote">We already take deposits for consults, so this fit right into how we already work — just automated.</p>
+        <div class="t-person">
+          <div class="t-avatar">RC</div>
+          <div><div class="t-name">R. Chen</div><div class="t-role">Owner, tattoo studio</div></div>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-quote">Missed appointments used to just be dead time on the schedule. Now they barely register — the waitlist handles it before I even see the gap.</p>
+        <div class="t-person">
+          <div class="t-avatar">SP</div>
+          <div><div class="t-name">S. Park</div><div class="t-role">Veterinary clinic owner</div></div>
         </div>
       </div>
     </div>
