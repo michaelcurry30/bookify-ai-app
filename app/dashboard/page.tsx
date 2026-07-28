@@ -1,16 +1,26 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 
 export default function Dashboard() {
   const [appointments, setAppointments] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
-  useEffect(() => {
+ useEffect(() => {
   fetch('/api/appointments')
-    .then(res => res.json())
-    .then(data => setAppointments(data.appointments || []))
+    .then(res => {
+      if (res.status === 401) {
+        router.push('/login')
+        return null
+      }
+      return res.json()
+    })
+    .then(data => {
+      if (data) setAppointments(data.appointments || [])
+    })
 }, [])
 
   const recovered = appointments
