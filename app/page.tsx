@@ -221,6 +221,98 @@ export default function Home() {
   footer{padding:32px 0 40px;border-top:1px solid var(--line);}
   .footer-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-soft);flex-wrap:wrap;gap:12px;}
 
+  .chat-widget{position:fixed;bottom:24px;right:24px;z-index:50;}
+  .chat-bubble{
+    width:56px;height:56px;border-radius:50%;
+    background:var(--indigo);
+    border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 24px rgba(109,107,255,0.5);
+    transition:transform .15s;
+  }
+  .chat-bubble:hover{transform:scale(1.06);}
+  .chat-panel{
+    display:none;
+    position:absolute;bottom:72px;right:0;
+    width:340px;max-width:calc(100vw - 48px);
+    height:460px;max-height:calc(100vh - 140px);
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 12px 48px rgba(0,0,0,0.5);
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .chat-panel.open{display:flex;}
+  .chat-header{
+    padding:16px 18px;
+    border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:flex-start;
+    background:var(--bg-soft);
+  }
+  .chat-header-title{font-weight:700;font-size:14.5px;}
+  .chat-header-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .chat-close{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:16px;padding:0;}
+  .chat-close:hover{color:var(--ink);}
+  .chat-messages{
+    flex:1;overflow-y:auto;
+    padding:16px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .chat-msg{
+    font-size:13.5px;
+    line-height:1.5;
+    padding:10px 13px;
+    border-radius:10px;
+    max-width:85%;
+  }
+  .chat-msg-bot{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    align-self:flex-start;
+  }
+  .chat-msg-user{
+    background:var(--indigo);
+    color:#fff;
+    align-self:flex-end;
+  }
+  .chat-msg-loading{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    align-self:flex-start;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+  .chat-input-row{
+    display:flex;gap:8px;
+    padding:12px;
+    border-top:1px solid var(--line);
+  }
+  .chat-input-row input{
+    flex:1;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 12px;
+    color:var(--ink);
+    font-size:13.5px;
+    outline:none;
+  }
+  .chat-input-row input:focus{border-color:var(--indigo);}
+  .chat-input-row button{
+    background:var(--indigo);
+    border:none;
+    border-radius:8px;
+    width:40px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  @media(max-width:480px){
+    .chat-widget{bottom:16px;right:16px;}
+    .chat-panel{width:calc(100vw - 32px);right:-8px;}
+  }
+
   @media(max-width:640px){
     .final-cta{padding:60px 0 70px;}
     .final-cta h2 br{display:none;}
@@ -524,6 +616,30 @@ export default function Home() {
   </div>
 </footer>
 
+<div class="chat-widget">
+  <button class="chat-bubble" id="chatBubble" aria-label="Open support chat">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H7l-3 3V4z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <div>
+        <div class="chat-header-title">Bookify AI Support</div>
+        <div class="chat-header-sub">Ask a question, get an instant answer</div>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Close chat">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg chat-msg-bot">Hi! I'm the Bookify AI support assistant. Ask me anything about pricing, how the waitlist works, or how to get set up.</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Type a question..." />
+      <button id="chatSend" aria-label="Send message">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12h16M14 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
 ` }} />
       <script dangerouslySetInnerHTML={{ __html: `
   document.querySelectorAll('.faq-item').forEach(item => {
@@ -558,6 +674,58 @@ export default function Home() {
         btn.textContent = originalText;
       }
     });
+  });
+
+  const chatBubble = document.getElementById('chatBubble');
+  const chatPanel = document.getElementById('chatPanel');
+  const chatClose = document.getElementById('chatClose');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+  let chatHistory = [];
+
+  chatBubble.addEventListener('click', () => {
+    chatPanel.classList.toggle('open');
+    if (chatPanel.classList.contains('open')) chatInput.focus();
+  });
+  chatClose.addEventListener('click', () => chatPanel.classList.remove('open'));
+
+  function addMessage(text, cls) {
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + cls;
+    div.textContent = text;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return div;
+  }
+
+  async function sendChatMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = '';
+    addMessage(text, 'chat-msg-user');
+    const loadingEl = addMessage('Thinking...', 'chat-msg-loading');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: chatHistory })
+      });
+      const data = await res.json();
+      loadingEl.remove();
+      addMessage(data.reply, 'chat-msg-bot');
+      chatHistory.push({ role: 'user', content: text });
+      chatHistory.push({ role: 'assistant', content: data.reply });
+    } catch (err) {
+      loadingEl.remove();
+      addMessage('Sorry, something went wrong. Please try again.', 'chat-msg-bot');
+    }
+  }
+
+  chatSend.addEventListener('click', sendChatMessage);
+  chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendChatMessage();
   });
 ` }} />
     </>

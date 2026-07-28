@@ -12,13 +12,29 @@ export async function POST(req: NextRequest) {
     .select()
     .single()
 
-  const { data: waitlistEntry } = await supabase
+  // First, look for someone specifically waiting for this staff member
+  let { data: waitlistEntry } = await supabase
     .from('waitlist')
     .select()
     .eq('business_id', appointment.business_id)
+    .eq('staff_id', appointment.staff_id)
     .order('added_at', { ascending: true })
     .limit(1)
-    .single()
+    .maybeSingle()
+
+  // If nobody's waiting specifically for this staff member, fall back to
+  // anyone on the waitlist who didn't request a specific person
+  if (!waitlistEntry) {
+    const fallback = await supabase
+      .from('waitlist')
+      .select()
+      .eq('business_id', appointment.business_id)
+      .is('staff_id', null)
+      .order('added_at', { ascending: true })
+      .limit(1)
+      .maybeSingle()
+    waitlistEntry = fallback.data
+  }
 
   if (waitlistEntry) {
     await sendSMS(

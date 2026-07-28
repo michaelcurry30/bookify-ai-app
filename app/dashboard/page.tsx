@@ -57,7 +57,8 @@ export default function Dashboard() {
             <tr key={a.id} style={{ borderBottom: '1px solid #ccc' }}>
               <td style={{ padding: '8px 0' }}>{a.start_time}</td>
               <td>{a.client_name}</td>
-              <td>{a.status}</td>
+<td>{a.staff?.name || 'Unassigned'}</td>
+<td>{a.status}</td>
             </tr>
           ))}
         </tbody>
