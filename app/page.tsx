@@ -361,7 +361,7 @@ export default function Home() {
         <a class="btn-primary" href="#pricing">Start 14-day free trial</a>
       </div>
       <div class="trust-row">
-        <span><span class="check">✓</span>No credit card required</span>
+        <span><span class="check">✓</span>14-day free trial</span>
         <span><span class="check">✓</span>Cancel anytime</span>
         <span><span class="check">✓</span>Setup in one afternoon</span>
       </div>
@@ -530,7 +530,7 @@ export default function Home() {
     <div class="pricing-head">
       <div class="section-eyebrow">Pricing</div>
       <h2>Pricing that pays for itself the first week</h2>
-      <p class="pricing-sub">Every plan includes a 14-day free trial. No credit card required to start.</p>
+      <p class="pricing-sub">Every plan includes a 14-day free trial. Your card won't be charged until the trial ends, and you can cancel anytime before then.</p>
     </div>
     <div class="plans">
       <div class="plan">
@@ -596,6 +596,10 @@ export default function Home() {
       <div class="faq-item">
         <div class="faq-q">Can I cancel anytime? <span class="plus">+</span></div>
         <div class="faq-a"><div class="faq-a-inner">Yes, every plan is month-to-month with no long-term contract. Cancel anytime from your account settings.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Will I be charged during the free trial? <span class="plus">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">No. Your card is required to start the trial, but you won't be charged until the 14 days are up. Cancel anytime before then and you won't be billed at all.</div></div>
       </div>
     </div>
   </div>
