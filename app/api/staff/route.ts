@@ -10,12 +10,12 @@ export async function GET() {
   }
 
   const { data } = await supabaseAdmin
-    .from('appointments')
-    .select('*, staff:staff_id(name)')
+    .from('staff')
+    .select()
     .eq('business_id', business.id)
-    .order('start_time', { ascending: true })
+    .order('name', { ascending: true })
 
-  return NextResponse.json({ appointments: data || [] })
+  return NextResponse.json({ staff: data || [] })
 }
 
 export async function POST(req: NextRequest) {
@@ -25,16 +25,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Not logged in' }, { status: 401 })
   }
 
-  const { client_name, client_phone, start_time, ticket_price, staff_id } = await req.json()
+  const { name } = await req.json()
 
-  const { error } = await supabaseAdmin.from('appointments').insert({
+  const { error } = await supabaseAdmin.from('staff').insert({
     business_id: business.id,
-    client_name,
-    client_phone,
-    start_time,
-    ticket_price: ticket_price ? parseFloat(ticket_price) : null,
-    staff_id: staff_id || null,
-    status: 'confirmed',
+    name,
   })
 
   if (error) {
