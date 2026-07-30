@@ -231,7 +231,7 @@ export default function Dashboard() {
 
         <div style={{ background: '#141926', border: '1px solid #242B3D', borderRadius: '12px', overflow: 'hidden' }}>
           <div style={{
-            display: 'grid', gridTemplateColumns: '110px 1fr 140px 100px 90px', padding: '14px 20px',
+            display: 'grid', gridTemplateColumns: '150px 1fr 140px 100px 90px', columnGap: '16px', padding: '14px 20px',
             borderBottom: '1px solid #242B3D', fontSize: '12px', fontWeight: 700, color: '#8891A8',
             textTransform: 'uppercase', letterSpacing: '0.04em',
           }}>
@@ -256,7 +256,7 @@ export default function Dashboard() {
             const colors = statusColors[a.status] || statusColors.confirmed
             return (
               <div key={a.id} style={{
-                display: 'grid', gridTemplateColumns: '110px 1fr 140px 100px 90px', padding: '14px 20px',
+                display: 'grid', gridTemplateColumns: '150px 1fr 140px 100px 90px', columnGap: '16px', padding: '14px 20px',
                 borderBottom: i === appointments.length - 1 ? 'none' : '1px solid #242B3D',
                 fontSize: '13.5px', alignItems: 'center',
               }}>
