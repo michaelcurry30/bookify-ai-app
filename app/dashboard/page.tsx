@@ -98,6 +98,17 @@ export default function Dashboard() {
     completed: { bg: 'rgba(136,145,168,0.15)', text: '#8891A8' },
   }
 
+  async function handleCancelAppt(id: string) {
+    if (!confirm('Cancel this appointment?')) return
+    const res = await fetch('/api/cancel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ appointmentId: id }),
+    })
+    if (res.ok) loadData()
+    else alert('Could not cancel. Please try again.')
+  }
+
   const inputStyle = {
     width: '100%', padding: '9px 11px', borderRadius: '6px',
     border: '1px solid #242B3D', background: '#0B0E17', color: '#EDEFF5',
@@ -229,9 +240,10 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div style={{ background: '#141926', border: '1px solid #242B3D', borderRadius: '12px', overflow: 'hidden' }}>
+        <div style={{ background: '#141926', border: '1px solid #242B3D', borderRadius: '12px', overflowX: 'auto' }}>
+          <div style={{ minWidth: '760px' }}>
           <div style={{
-            display: 'grid', gridTemplateColumns: '150px 1fr 140px 100px 90px', columnGap: '16px', padding: '14px 20px',
+            display: 'grid', gridTemplateColumns: '150px 1fr 140px 100px 90px 70px', columnGap: '24px', padding: '14px 20px',
             borderBottom: '1px solid #242B3D', fontSize: '12px', fontWeight: 700, color: '#8891A8',
             textTransform: 'uppercase', letterSpacing: '0.04em',
           }}>
@@ -256,11 +268,11 @@ export default function Dashboard() {
             const colors = statusColors[a.status] || statusColors.confirmed
             return (
               <div key={a.id} style={{
-                display: 'grid', gridTemplateColumns: '150px 1fr 140px 100px 90px', columnGap: '16px', padding: '14px 20px',
+                display: 'grid', gridTemplateColumns: '150px 1fr 140px 100px 90px 70px', columnGap: '24px', padding: '14px 20px',
                 borderBottom: i === appointments.length - 1 ? 'none' : '1px solid #242B3D',
                 fontSize: '13.5px', alignItems: 'center',
               }}>
-                <div style={{ color: '#8891A8', fontFamily: 'monospace', fontSize: '12.5px' }}>
+                <div style={{ color: '#8891A8', fontFamily: 'monospace', fontSize: '12.5px', whiteSpace: 'nowrap' }}>
                   {a.start_time ? new Date(a.start_time).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—'}
                 </div>
                 <div>{a.client_name || '—'}</div>
@@ -273,9 +285,20 @@ export default function Dashboard() {
                 <div style={{ textAlign: 'right', color: '#8891A8' }}>
                   {a.ticket_price ? `$${a.ticket_price}` : '—'}
                 </div>
+                <div style={{ textAlign: 'right' }}>
+                  {a.status !== 'cancelled' && (
+                    <button onClick={() => handleCancelAppt(a.id)} style={{
+                      background: 'none', border: 'none', color: '#FB7185', fontSize: '12px',
+                      cursor: 'pointer', textDecoration: 'underline', padding: 0,
+                    }}>
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </div>
             )
           })}
+          </div>
         </div>
       </div>
     </div>
