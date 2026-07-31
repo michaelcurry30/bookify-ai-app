@@ -15,7 +15,9 @@ export default function Dashboard() {
   const [newAppt, setNewAppt] = useState({
     client_name: '', client_phone: '', start_time: '', ticket_price: '', staff_id: ''
   })
-  const [newStaffName, setNewStaffName] = useState('')
+  
+       const [newStaffName, setNewStaffName] = useState('')
+  const [newStaffPhoto, setNewStaffPhoto] = useState('')
   const [savingAppt, setSavingAppt] = useState(false)
   const [savingStaff, setSavingStaff] = useState(false)
 
@@ -79,11 +81,12 @@ export default function Dashboard() {
     const res = await fetch('/api/staff', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newStaffName }),
+      body: JSON.stringify({ name: newStaffName, photo_url: newStaffPhoto }),
     })
     setSavingStaff(false)
     if (res.ok) {
       setNewStaffName('')
+      setNewStaffPhoto('')
       setShowStaffForm(false)
       loadData()
     } else {
@@ -169,6 +172,13 @@ export default function Dashboard() {
               <input
                 type="text" value={newStaffName} onChange={(e) => setNewStaffName(e.target.value)}
                 required style={inputStyle as any}
+              />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={labelStyle}>Photo URL (optional)</label>
+              <input
+                type="url" value={newStaffPhoto} onChange={(e) => setNewStaffPhoto(e.target.value)}
+                placeholder="https://..." style={inputStyle as any}
               />
             </div>
             <button type="submit" disabled={savingStaff} style={{

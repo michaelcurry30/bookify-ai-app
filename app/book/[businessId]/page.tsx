@@ -14,6 +14,7 @@ export default function BookingPage() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
   const [bookedApptId, setBookedApptId] = useState('')
+  const [consentChecked, setConsentChecked] = useState(false)
   const [cancelling, setCancelling] = useState(false)
   const [cancelled, setCancelled] = useState(false)
 
@@ -34,6 +35,10 @@ export default function BookingPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!consentChecked) {
+      setError('Please check the box agreeing to receive SMS notifications to continue.')
+      return
+    }
     setSubmitting(true)
     setError('')
 
@@ -156,6 +161,22 @@ export default function BookingPage() {
               placeholder="+15551234567" required style={inputStyle as any} />
           </div>
 
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '9px', fontSize: '12.5px', color: '#8891A8', lineHeight: 1.5, cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={consentChecked}
+                onChange={(e) => setConsentChecked(e.target.checked)}
+                style={{ marginTop: '2px', flexShrink: 0 }}
+              />
+              <span>
+                I agree to receive SMS appointment reminders and waitlist notifications regarding my booking. Message and data rates may apply. Message frequency varies. Reply STOP to unsubscribe. See our{' '}
+                <a href="/privacy" target="_blank" style={{ color: '#7DD3FC' }}>Privacy Policy</a> and{' '}
+                <a href="/terms" target="_blank" style={{ color: '#7DD3FC' }}>Terms of Service</a>.
+              </span>
+            </label>
+          </div>
+
           <div style={{ marginBottom: '16px' }}>
             <label style={labelStyle}>Date &amp; time</label>
             <input type="datetime-local" value={form.start_time}
@@ -166,12 +187,43 @@ export default function BookingPage() {
           {staff.length > 0 && (
             <div style={{ marginBottom: '24px' }}>
               <label style={labelStyle}>Who would you like to see?</label>
-              <select value={form.staff_id}
-                onChange={(e) => setForm({ ...form, staff_id: e.target.value })}
-                style={inputStyle as any}>
-                <option value="">No preference</option>
-                {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-              </select>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                <button type="button" onClick={() => setForm({ ...form, staff_id: '' })}
+                  style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+                    background: 'none', border: form.staff_id === '' ? '2px solid #6D6BFF' : '2px solid #242B3D',
+                    borderRadius: '10px', padding: '10px 12px', cursor: 'pointer', width: '84px',
+                  }}>
+                  <div style={{
+                    width: '48px', height: '48px', borderRadius: '50%', background: '#0B0E17',
+                    border: '1px solid #242B3D', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#8891A8', fontSize: '11px',
+                  }}>Any</div>
+                  <span style={{ fontSize: '11.5px', color: '#EDEFF5', textAlign: 'center' }}>No preference</span>
+                </button>
+                {staff.map(s => (
+                  <button key={s.id} type="button" onClick={() => setForm({ ...form, staff_id: s.id })}
+                    style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+                      background: 'none', border: form.staff_id === s.id ? '2px solid #6D6BFF' : '2px solid #242B3D',
+                      borderRadius: '10px', padding: '10px 12px', cursor: 'pointer', width: '84px',
+                    }}>
+                    {s.photo_url ? (
+                      <img src={s.photo_url} alt={s.name} style={{
+                        width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover',
+                        border: '1px solid #242B3D',
+                      }} />
+                    ) : (
+                      <div style={{
+                        width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(109,107,255,0.15)',
+                        border: '1px solid #6D6BFF', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: '#7DD3FC', fontSize: '16px', fontWeight: 700,
+                      }}>{s.name.charAt(0).toUpperCase()}</div>
+                    )}
+                    <span style={{ fontSize: '11.5px', color: '#EDEFF5', textAlign: 'center' }}>{s.name}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 

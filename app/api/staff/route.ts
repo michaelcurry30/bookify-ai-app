@@ -25,11 +25,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Not logged in' }, { status: 401 })
   }
 
-  const { name } = await req.json()
+  const { name, photo_url } = await req.json()
 
   const { error } = await supabaseAdmin.from('staff').insert({
     business_id: business.id,
     name,
+    photo_url: photo_url || null,
   })
 
   if (error) {
