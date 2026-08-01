@@ -413,15 +413,6 @@ export default function Home() {
   </div>
 </section>
 
-<section class="stats">
-  <div class="wrap stats-grid">
-    <div class="stat"><div class="num">$2.1M+</div><div class="label">Revenue recovered for customers</div></div>
-    <div class="stat"><div class="num">31%</div><div class="label">Average drop in no-show rate</div></div>
-    <div class="stat"><div class="num">340+</div><div class="label">Businesses on Bookify AI</div></div>
-    <div class="stat"><div class="num">4.8/5</div><div class="label">Average customer rating</div></div>
-  </div>
-</section>
-
 <section class="problem">
   <div class="wrap">
     <div class="section-eyebrow">The problem</div>
@@ -462,64 +453,6 @@ export default function Home() {
         <div class="step-num">03</div>
         <h3>Cancellations auto-fill</h3>
         <p>The moment a slot opens, your waitlist gets texted in order. First to reply keeps the spot.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="testimonials">
-  <div class="wrap">
-    <h2>What businesses are saying</h2>
-    <div class="t-grid">
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-quote">We used to just eat the cost of a cancellation. Now the waitlist fills the chair before the front desk even notices it opened up.</p>
-        <div class="t-person">
-          <div class="t-avatar">MK</div>
-          <div><div class="t-name">M. Kowalski</div><div class="t-role">Salon owner (2 locations)</div></div>
-        </div>
-      </div>
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-quote">Setup took less than an hour. It plugged straight into the calendar we were already using, which is what sold me.</p>
-        <div class="t-person">
-          <div class="t-avatar">DR</div>
-          <div><div class="t-name">D. Reyes</div><div class="t-role">Dental practice manager</div></div>
-        </div>
-      </div>
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-quote">I'm 1-on-1 all day — a no-show is a session I don't get paid for. This is the first tool that's actually helped with that.</p>
-        <div class="t-person">
-          <div class="t-avatar">JT</div>
-          <div><div class="t-name">J. Torres</div><div class="t-role">Personal trainer</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="t-grid" style="margin-top:24px;">
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-quote">Our sessions run $150+, so a no-show used to really sting. The waitlist text usually fills the slot within minutes.</p>
-        <div class="t-person">
-          <div class="t-avatar">AL</div>
-          <div><div class="t-name">A. Lin</div><div class="t-role">Owner, chiropractic clinic</div></div>
-        </div>
-      </div>
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-quote">We already take deposits for consults, so this fit right into how we already work — just automated.</p>
-        <div class="t-person">
-          <div class="t-avatar">RC</div>
-          <div><div class="t-name">R. Chen</div><div class="t-role">Owner, tattoo studio</div></div>
-        </div>
-      </div>
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-quote">Missed appointments used to just be dead time on the schedule. Now they barely register — the waitlist handles it before I even see the gap.</p>
-        <div class="t-person">
-          <div class="t-avatar">SP</div>
-          <div><div class="t-name">S. Park</div><div class="t-role">Veterinary clinic owner</div></div>
-        </div>
       </div>
     </div>
   </div>
