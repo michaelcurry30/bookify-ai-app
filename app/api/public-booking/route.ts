@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
-  // Check if this staff member already has a non-cancelled appointment at this exact time
   if (staff_id) {
     const { data: conflict } = await supabaseAdmin
       .from('appointments')
@@ -22,6 +21,27 @@ export async function POST(req: NextRequest) {
     if (conflict) {
       return NextResponse.json(
         { error: 'That time is already taken. Please pick a different time.' },
+        { status: 409 }
+      )
+    }
+  } else {
+    const { count: staffCount } = await supabaseAdmin
+      .from('staff')
+      .select('id', { count: 'exact', head: true })
+      .eq('business_id', business_id)
+
+    const { count: bookedCount } = await supabaseAdmin
+      .from('appointments')
+      .select('id', { count: 'exact', head: true })
+      .eq('business_id', business_id)
+      .eq('start_time', start_time)
+      .neq('status', 'cancelled')
+
+    const capacity = staffCount && staffCount > 0 ? staffCount : 1
+
+    if ((bookedCount || 0) >= capacity) {
+      return NextResponse.json(
+        { error: 'That time is fully booked. Please pick a different time.' },
         { status: 409 }
       )
     }

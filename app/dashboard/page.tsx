@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 export default function Dashboard() {
   const [appointments, setAppointments] = useState<any[]>([])
   const [staff, setStaff] = useState<any[]>([])
+  const [businessId, setBusinessId] = useState('')
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
   const [showAppointmentForm, setShowAppointmentForm] = useState(false)
@@ -18,6 +19,9 @@ export default function Dashboard() {
   
        const [newStaffName, setNewStaffName] = useState('')
   const [newStaffPhoto, setNewStaffPhoto] = useState('')
+  const [editingStaffId, setEditingStaffId] = useState('')
+  const [editStaffName, setEditStaffName] = useState('')
+  const [editStaffPhoto, setEditStaffPhoto] = useState('')
   const [savingAppt, setSavingAppt] = useState(false)
   const [savingStaff, setSavingStaff] = useState(false)
 
@@ -33,7 +37,10 @@ export default function Dashboard() {
         return res.json()
       }),
     ]).then(([apptData, staffData]) => {
-      if (apptData) setAppointments(apptData.appointments || [])
+      if (apptData) {
+        setAppointments(apptData.appointments || [])
+        setBusinessId(apptData.businessId || '')
+      }
       if (staffData) setStaff(staffData.staff || [])
       setFetching(false)
     })
@@ -101,6 +108,33 @@ export default function Dashboard() {
     completed: { bg: 'rgba(136,145,168,0.15)', text: '#8891A8' },
   }
 
+  function startEditStaff(s: any) {
+    setEditingStaffId(s.id)
+    setEditStaffName(s.name)
+    setEditStaffPhoto(s.photo_url || '')
+  }
+
+  async function handleSaveStaffEdit(id: string) {
+    const res = await fetch(`/api/staff/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: editStaffName, photo_url: editStaffPhoto }),
+    })
+    if (res.ok) {
+      setEditingStaffId('')
+      loadData()
+    } else {
+      alert('Could not save changes. Please try again.')
+    }
+  }
+
+  async function handleRemoveStaff(id: string) {
+    if (!confirm('Remove this staff member? This will not affect their past appointments.')) return
+    const res = await fetch(`/api/staff/${id}`, { method: 'DELETE' })
+    if (res.ok) loadData()
+    else alert('Could not remove. Please try again.')
+  }
+
   async function handleCancelAppt(id: string) {
     if (!confirm('Cancel this appointment?')) return
     const res = await fetch('/api/cancel', {
@@ -120,6 +154,16 @@ export default function Dashboard() {
   const labelStyle = { display: 'block', fontSize: '12px', marginBottom: '5px', color: '#8891A8' }
 
   return (
+    <>
+    <style dangerouslySetInnerHTML={{ __html: `
+      @media (max-width: 700px) {
+        .dash-header-row { display: none !important; }
+        .dash-row { display: flex !important; flex-direction: column !important; gap: 6px !important; padding: 14px 16px !important; }
+        .dash-row > div { display: flex !important; justify-content: space-between !important; align-items: center !important; white-space: normal !important; }
+        .dash-row > div::before { content: attr(data-label); color: #8891A8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .dash-row > div:last-child { justify-content: flex-end !important; }
+      }
+    ` }} />
     <div style={{
       minHeight: '100vh',
       background: '#0B0E17',
@@ -133,6 +177,8 @@ export default function Dashboard() {
             <span style={{ width: '22px', height: '22px', background: '#6D6BFF', borderRadius: '6px', display: 'inline-block', boxShadow: '0 0 16px rgba(109,107,255,0.5)' }} />
             <span style={{ fontWeight: 800, fontSize: '18px' }}>Bookify AI</span>
           </div>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <a href="/settings" style={{ color: '#8891A8', fontSize: '13.5px', textDecoration: 'none' }}>Settings</a>
           <button onClick={openPortal} disabled={loading} style={{
             background: '#6D6BFF', color: '#fff', padding: '10px 18px', borderRadius: '6px',
             border: 'none', cursor: 'pointer', fontSize: '13.5px', fontWeight: 600,
@@ -140,10 +186,43 @@ export default function Dashboard() {
           }}>
             {loading ? 'Opening...' : 'Manage subscription'}
           </button>
+          </div>
         </div>
       </div>
 
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px 60px' }}>
+        {staff.length === 0 && appointments.length === 0 && !fetching && (
+          <div style={{
+            background: 'rgba(109,107,255,0.08)', border: '1px solid #6D6BFF', borderRadius: '10px',
+            padding: '20px', marginBottom: '24px',
+          }}>
+            <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '10px' }}>👋 Welcome to Bookify AI</div>
+            <div style={{ fontSize: '13.5px', color: '#D5D8E2', lineHeight: 1.6, marginBottom: '14px' }}>
+              Here's how to get started:
+              <br />1. Add your staff members below (optional, but lets clients pick who they see)
+              <br />2. Share your booking link with clients so they can book themselves
+              <br />3. Manage cancellations right here — we'll automatically text your waitlist when a slot opens
+            </div>
+            <div style={{ fontSize: '12px', color: '#8891A8', marginBottom: '6px' }}>Your booking link</div>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <code style={{
+                background: '#0B0E17', border: '1px solid #242B3D', borderRadius: '6px',
+                padding: '8px 12px', fontSize: '12.5px', color: '#7DD3FC', flex: 1, minWidth: '200px',
+                overflowX: 'auto', whiteSpace: 'nowrap',
+              }}>
+                {typeof window !== 'undefined' ? `${window.location.origin}/book/${businessId}` : ''}
+              </code>
+              <button onClick={() => {
+                navigator.clipboard.writeText(`${window.location.origin}/book/${businessId}`)
+                alert('Copied!')
+              }} style={{
+                background: '#6D6BFF', color: '#fff', padding: '8px 16px', borderRadius: '6px',
+                border: 'none', cursor: 'pointer', fontSize: '12.5px', fontWeight: 600,
+              }}>Copy</button>
+            </div>
+          </div>
+        )}
+
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <h1 style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.01em' }}>Today's schedule</h1>
           <div style={{ display: 'flex', gap: '10px' }}>
@@ -239,6 +318,69 @@ export default function Dashboard() {
           </form>
         )}
 
+        {staff.length > 0 && (
+          <div style={{
+            background: '#141926', border: '1px solid #242B3D', borderRadius: '10px',
+            padding: '18px 20px', marginTop: '20px',
+          }}>
+            <div style={{ fontSize: '12px', color: '#8891A8', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '14px' }}>Staff</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {staff.map(s => (
+                <div key={s.id}>
+                  {editingStaffId === s.id ? (
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                      <div style={{ flex: 1, minWidth: '140px' }}>
+                        <label style={labelStyle}>Name</label>
+                        <input type="text" value={editStaffName}
+                          onChange={(e) => setEditStaffName(e.target.value)}
+                          style={inputStyle as any} />
+                      </div>
+                      <div style={{ flex: 1, minWidth: '140px' }}>
+                        <label style={labelStyle}>Photo URL</label>
+                        <input type="url" value={editStaffPhoto}
+                          onChange={(e) => setEditStaffPhoto(e.target.value)}
+                          style={inputStyle as any} />
+                      </div>
+                      <button onClick={() => handleSaveStaffEdit(s.id)} style={{
+                        background: '#6D6BFF', color: '#fff', padding: '9px 16px', borderRadius: '6px',
+                        border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 600, height: '38px',
+                      }}>Save</button>
+                      <button onClick={() => setEditingStaffId('')} style={{
+                        background: 'none', color: '#8891A8', padding: '9px 12px', borderRadius: '6px',
+                        border: '1px solid #242B3D', cursor: 'pointer', fontSize: '13px', height: '38px',
+                      }}>Cancel</button>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        {s.photo_url ? (
+                          <img src={s.photo_url} alt={s.name} style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
+                        ) : (
+                          <div style={{
+                            width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(109,107,255,0.15)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7DD3FC', fontSize: '13px', fontWeight: 700,
+                          }}>{s.name.charAt(0).toUpperCase()}</div>
+                        )}
+                        <span style={{ fontSize: '14px' }}>{s.name}</span>
+                      </div>
+                      <div style={{ display: 'flex', gap: '14px' }}>
+                        <button onClick={() => startEditStaff(s)} style={{
+                          background: 'none', border: 'none', color: '#7DD3FC', fontSize: '12px',
+                          cursor: 'pointer', textDecoration: 'underline', padding: 0,
+                        }}>Edit</button>
+                        <button onClick={() => handleRemoveStaff(s.id)} style={{
+                          background: 'none', border: 'none', color: '#FB7185', fontSize: '12px',
+                          cursor: 'pointer', textDecoration: 'underline', padding: 0,
+                        }}>Remove</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginTop: '24px', marginBottom: '32px' }}>
           <div style={{ background: '#141926', border: '1px solid #242B3D', borderRadius: '10px', padding: '20px' }}>
             <div style={{ fontSize: '12px', color: '#8891A8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Recovered this week</div>
@@ -252,7 +394,7 @@ export default function Dashboard() {
 
         <div style={{ background: '#141926', border: '1px solid #242B3D', borderRadius: '12px', overflowX: 'auto' }}>
           <div style={{ minWidth: '760px' }}>
-          <div style={{
+          <div className="dash-header-row" style={{
             display: 'grid', gridTemplateColumns: '150px 1fr 140px 100px 90px 70px', columnGap: '24px', padding: '14px 20px',
             borderBottom: '1px solid #242B3D', fontSize: '12px', fontWeight: 700, color: '#8891A8',
             textTransform: 'uppercase', letterSpacing: '0.04em',
@@ -277,25 +419,25 @@ export default function Dashboard() {
           {appointments.map((a, i) => {
             const colors = statusColors[a.status] || statusColors.confirmed
             return (
-              <div key={a.id} style={{
+              <div key={a.id} className="dash-row" style={{
                 display: 'grid', gridTemplateColumns: '150px 1fr 140px 100px 90px 70px', columnGap: '24px', padding: '14px 20px',
                 borderBottom: i === appointments.length - 1 ? 'none' : '1px solid #242B3D',
                 fontSize: '13.5px', alignItems: 'center',
               }}>
-                <div style={{ color: '#8891A8', fontFamily: 'monospace', fontSize: '12.5px', whiteSpace: 'nowrap' }}>
+                <div data-label="Time" style={{ color: '#8891A8', fontFamily: 'monospace', fontSize: '12.5px', whiteSpace: 'nowrap' }}>
                   {a.start_time ? new Date(a.start_time).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—'}
                 </div>
-                <div>{a.client_name || '—'}</div>
-                <div style={{ color: '#8891A8' }}>{a.staff?.name || 'Unassigned'}</div>
-                <div>
+                <div data-label="Client">{a.client_name || '—'}</div>
+                <div data-label="Staff" style={{ color: '#8891A8' }}>{a.staff?.name || 'Unassigned'}</div>
+                <div data-label="Status">
                   <span style={{ fontSize: '11px', fontWeight: 600, padding: '3px 9px', borderRadius: '20px', background: colors.bg, color: colors.text }}>
                     {a.status}
                   </span>
                 </div>
-                <div style={{ textAlign: 'right', color: '#8891A8' }}>
+                <div data-label="Ticket" style={{ textAlign: 'right', color: '#8891A8' }}>
                   {a.ticket_price ? `$${a.ticket_price}` : '—'}
                 </div>
-                <div style={{ textAlign: 'right' }}>
+                <div data-label="">
                   {a.status !== 'cancelled' && (
                     <button onClick={() => handleCancelAppt(a.id)} style={{
                       background: 'none', border: 'none', color: '#FB7185', fontSize: '12px',
@@ -312,5 +454,6 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+    </>
   )
 }
